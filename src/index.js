@@ -1,17 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
+import { createStore } from "redux";
+import employeeReducer from "./Redux/Reducers/employeeReducer";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { Provider } from "react-redux";
+const store = createStore(employeeReducer, composeWithDevTools);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </React.StrictMode>
+  <Router>
+    <App />
+  </Router>
 );
