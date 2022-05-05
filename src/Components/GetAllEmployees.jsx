@@ -1,19 +1,24 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import EditEmployee from "./EditEmployee";
 import CreateEmployee from "./CreateEmployee";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
+import ReactPaginate from "react-paginate";
 import img from "../Images/image2.jpg";
 export default function GetAllEmployees() {
+  const [employeeId, setEmployeeId] = useState();
   const employees = useSelector((state) => state);
   const dispatch = useDispatch((state) => state);
   const deleteEmployee = (id) => {
     dispatch({ type: "DELETE_EMPLOYEE", payload: id });
   };
   const getEmployeeId = (id) => {
-    return id;
+    setEmployeeId(id);
   };
+  useEffect(() => {
+    console.log(employeeId);
+  }, [employeeId]);
   return (
     <>
       <div className='d-flex w-50 justify-content-between mx-auto my-3 flex-wrap'>
@@ -36,21 +41,28 @@ export default function GetAllEmployees() {
             <td className='text-white'>Gender</td>
             <td className='text-white'>Action</td>
           </tr>
-          {employees.map((employee, id) => {
+          {employees.map((employee, index) => {
             return (
-              <tr key={id}>
+              <tr key={index}>
                 <td>{employee.id}</td>
                 <td>{employee.name}</td>
                 <td>{employee.email}</td>
                 <td>{employee.gender}</td>
                 <td>
-                  <button className='btn' onClick={getEmployeeId(employee.id)}>
+                  <button
+                    className='btn shadow-none'
+                    data-bs-toggle='modal'
+                    data-bs-target='#employeeEditModal'
+                    onClick={() => getEmployeeId(employee.id)}
+                  >
                     <FaEdit className='text-primary' />
                   </button>
+                  <EditEmployee id={employeeId} />
                   <button
                     className='btn shadow-none'
                     data-bs-toggle='modal'
                     data-bs-target='#exampleModal'
+                    onClick={() => getEmployeeId(employee.id)}
                   >
                     <MdDelete className='text-danger ms-3' />
                   </button>
@@ -75,11 +87,12 @@ export default function GetAllEmployees() {
                           >
                             Cancel
                           </button>
+                          {}
                           <button
                             type='button'
                             className='btn btn-primary'
                             data-bs-dismiss='modal'
-                            onClick={() => deleteEmployee(employee.id)}
+                            onClick={() => deleteEmployee(employeeId)}
                           >
                             OK
                           </button>

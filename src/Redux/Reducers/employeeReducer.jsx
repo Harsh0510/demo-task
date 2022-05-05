@@ -27,6 +27,15 @@ const employeeReducer = (state = initialState, action) => {
       state = [...state, action.payload];
       localStorage.setItem("employees", JSON.stringify(state));
       return state;
+    case "UPDATE_EMPLOYEE":
+      const updateState = state.map((employee) =>
+        employee.id === action.payload.id ? action.payload : employee
+      );
+      console.log(action.payload.id);
+      console.log(action);
+      state = updateState;
+      localStorage.setItem("employees", JSON.stringify(state));
+      return state;
     case "DELETE_EMPLOYEE":
       const filterEmployee = state.filter(
         (employee) => employee.id !== action.payload
