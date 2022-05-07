@@ -5,10 +5,31 @@ import CreateEmployee from "./CreateEmployee";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import ReactPaginate from "react-paginate";
+import "./GetAllEmployees.css";
 import img from "../Images/image2.jpg";
 export default function GetAllEmployees() {
   const [employeeId, setEmployeeId] = useState();
+  const [query, setQuery] = useState("");
+  const [pageNumber, setPageNumber] = useState(0);
+  const usersPerPage = 5;
+  const pagesVisited = pageNumber * usersPerPage;
+
   const employees = useSelector((state) => state);
+  const searchEmployees = employees.filter(
+    (employee) =>
+      employee.name.toLowerCase().includes(query) ||
+      employee.email.toLowerCase().includes(query) ||
+      employee.gender.toLowerCase().includes(query)
+  );
+  const displayUsers = searchEmployees.slice(
+    pagesVisited,
+    pagesVisited + usersPerPage
+  );
+  const pageCount = Math.ceil(employees.length / usersPerPage);
+  const changePage = ({ selected }) => {
+    setPageNumber(selected);
+  };
+
   const dispatch = useDispatch((state) => state);
   const deleteEmployee = (id) => {
     dispatch({ type: "DELETE_EMPLOYEE", payload: id });
@@ -19,6 +40,7 @@ export default function GetAllEmployees() {
   useEffect(() => {
     console.log(employeeId);
   }, [employeeId]);
+
   return (
     <>
       <div className='d-flex w-50 justify-content-between mx-auto my-3 flex-wrap'>
@@ -28,6 +50,7 @@ export default function GetAllEmployees() {
             id='form1'
             className='form-control shadow-none'
             placeholder='Search here..'
+            onChange={(e) => setQuery(e.target.value)}
           />
         </div>
         <CreateEmployee />
@@ -41,7 +64,7 @@ export default function GetAllEmployees() {
             <td className='text-white'>Gender</td>
             <td className='text-white'>Action</td>
           </tr>
-          {employees.map((employee, index) => {
+          {displayUsers.map((employee, index) => {
             return (
               <tr key={index}>
                 <td>{employee.id}</td>
@@ -106,6 +129,17 @@ export default function GetAllEmployees() {
           })}
         </tbody>
       </table>
+      <ReactPaginate
+        previousLabel={"previous"}
+        nextLabel={"Next"}
+        pageCount={pageCount}
+        onPageChange={changePage}
+        containerClassName={"paginationBttns"}
+        previousLinkClassName={"previousBttn"}
+        nextLinkClassName={"nextBttn"}
+        disabledClassName={"paginationDisabled"}
+        activeClassName={"paginationActive"}
+      />
     </>
   );
 }
