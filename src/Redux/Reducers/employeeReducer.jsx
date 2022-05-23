@@ -1,3 +1,4 @@
+import { ADD_EMPLOYEE, UPDATE_EMPLOYEE, DELETE_EMPLOYEE } from "./employeeType";
 let initialState = [
   {
     id: 1,
@@ -23,27 +24,20 @@ initialState = JSON.parse(localStorage.getItem("employees") || "[]");
 
 const employeeReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_EMPLOYEE":
-      state = [...state, action.payload];
-      localStorage.setItem("employees", JSON.stringify(state));
-      return state;
-    case "UPDATE_EMPLOYEE":
-      const updateState = state.map((employee) =>
+    case ADD_EMPLOYEE:
+      const upState = [...state, action.payload];
+      localStorage.setItem("employees", JSON.stringify(upState));
+      return upState;
+    case UPDATE_EMPLOYEE:
+      const updatedState = state.map((employee) =>
         employee.id === action.payload.id ? action.payload : employee
       );
-      console.log(action.payload.id);
-      console.log(action);
-      state = updateState;
-      localStorage.setItem("employees", JSON.stringify(state));
-      return state;
-    case "DELETE_EMPLOYEE":
-      const filterEmployee = state.filter(
-        (employee) => employee.id !== action.payload
-      );
-      state = filterEmployee;
-      localStorage.setItem("employees", JSON.stringify(state));
-      return state;
-
+      localStorage.setItem("employees", JSON.stringify(updatedState));
+      return updatedState;
+    case DELETE_EMPLOYEE:
+      const uState = state.filter((employee) => employee.id !== action.payload);
+      localStorage.setItem("employees", JSON.stringify(uState));
+      return uState;
     default:
       return state;
   }

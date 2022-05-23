@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import Form from "../Utils/Form";
-import img from "../Images/image.jpg";
+import validation from "../../Utils/Validation";
+import { Edit_Employee } from "../../Redux/Reducers/employeeAction";
+import Form from "../../Utils/Form";
+import img from "../../Images/image.jpg";
 
 export default function EditEmployee({ id }) {
   const [name, setName] = useState("");
@@ -36,49 +37,34 @@ export default function EditEmployee({ id }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name) {
-      return toast.warning("Please fill in name field!");
-    }
-    if (!email) {
-      return toast.warning("Please fill in email field!");
-    }
-    if (!gender) {
-      return toast.warning("Please fill in gender field!");
-    }
-    if (!designation) {
-      return toast.warning("Please fill in designation field!");
-    }
-    if (!skill) {
-      return toast.warning("Please fill in skill field!");
-    }
-    if (!date) {
-      return toast.warning("Please fill in date field!");
-    }
-    if (checkEmail) {
-      return toast.error("This email is already Exists!");
-    }
+    if (
+      !validation(name, email, gender, designation, skill, date, checkEmail)
+    ) {
+      const employeeData = {
+        id: parseInt(id),
+        name,
+        email,
+        gender,
+        designation,
+        skill,
+        date,
+      };
 
-    const employeeData = {
-      id: parseInt(id),
-      name,
-      email,
-      gender,
-      designation,
-      skill,
-      date,
-    };
-
-    dispatch({ type: "UPDATE_EMPLOYEE", payload: employeeData });
-    // toast.success("Student added successfully!!");
+      dispatch(Edit_Employee(employeeData));
+    }
   };
 
   return (
     <>
       <div className='modal fade' id='employeeEditModal'>
         <div className='modal-dialog'>
-          <div className='modal-content'>
+          <div className='modal-content' style={{ background: "#F1F1F1" }}>
             <div className='modal-header'>
-              <h5 className='modal-title' id='employeeModalLabel'>
+              <h5
+                className='modal-title'
+                id='employeeModalLabel'
+                style={{ color: "#5EC5CF" }}
+              >
                 Edit Employee
               </h5>
               <button

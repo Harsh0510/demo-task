@@ -18,7 +18,7 @@ export default function Form({
 }) {
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='form'>
         <div className='mb-3'>
           <input
             type='text'
@@ -32,7 +32,7 @@ export default function Form({
         </div>
         <div className='mb-3'>
           <input
-            type='email'
+            type='text'
             className='form-control'
             id='email'
             name='email'
@@ -117,23 +117,29 @@ export default function Form({
         !checkEmail ? (
           <button
             type='submit'
-            className='btn btn-primary '
+            className='btn'
             data-bs-target='#employeeModal2'
             data-bs-toggle='modal'
             data-bs-dismiss='modal'
+            style={{ background: "#17A2B7", color: "#FFFFFF" }}
           >
             Submit
           </button>
         ) : (
-          <button type='submit' className='btn btn-primary '>
+          <button
+            type='submit'
+            className='btn'
+            style={{ background: "#17A2B7", color: "#FFFFFF" }}
+          >
             Submit
           </button>
         )}
 
         <button
           type='button'
-          className='btn btn-secondary ms-2'
+          className='btn ms-2'
           data-bs-dismiss='modal'
+          style={{ background: "#17A2B7", color: "#FFFFFF" }}
         >
           Close
         </button>

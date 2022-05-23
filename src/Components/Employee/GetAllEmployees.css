@@ -31,3 +31,15 @@
 .nextBttn {
   text-decoration: none;
 }
+
+.column {
+  cursor: pointer;
+}
+
+.collaapse-content {
+  width: 500px;
+  margin-left: -600px;
+  display: flex;
+  justify-content: space-around;
+  font-weight: bold;
+}

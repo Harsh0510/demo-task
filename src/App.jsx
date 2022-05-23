@@ -1,12 +1,12 @@
 import React from "react";
-import { ToastContainer } from "react-toastify";
-import GetAllEmployees from "./Components/GetAllEmployees";
+import RoutesComponent from "./Routes/Routes";
+
+import "../node_modules/bootstrap/js/src/collapse.js";
 
 export default function App() {
   return (
     <>
-      <ToastContainer />
-      <GetAllEmployees />
+      <RoutesComponent />
     </>
   );
 }

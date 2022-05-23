@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import Form from "../Utils/Form";
-import img from "../Images/image.jpg";
+import Form from "../../Utils/Form";
+import img from "../../Images/image.jpg";
+import { Add_Employee } from "../../Redux/Reducers/employeeAction";
+import validation from "../../Utils/Validation";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 export default function CreateEmployee() {
   const [name, setName] = useState("");
@@ -16,43 +17,26 @@ export default function CreateEmployee() {
   const checkEmail = employees.find((employee) => employee.email === email);
 
   const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name) {
-      return toast.warning("Please fill in name field!");
-    }
-    if (!email) {
-      return toast.warning("Please fill in email field!");
-    }
-    if (!gender) {
-      return toast.warning("Please fill in gender field!");
-    }
-    if (!designation) {
-      return toast.warning("Please fill in designation field!");
-    }
-    if (!skill) {
-      return toast.warning("Please fill in skill field!");
-    }
-    if (!date) {
-      return toast.warning("Please fill in date field!");
-    }
-    if (checkEmail) {
-      return toast.error("This email is already Exists!");
+    if (
+      !validation(name, email, gender, designation, skill, date, checkEmail)
+    ) {
+      const employeeData = {
+        id: employees[employees.length - 1].id + 1,
+        name,
+        email,
+        gender,
+        designation,
+        skill,
+        date,
+      };
+
+      dispatch(Add_Employee(employeeData));
     }
 
-    const employeeData = {
-      id: employees[employees.length - 1].id + 1,
-      name,
-      email,
-      gender,
-      designation,
-      skill,
-      date,
-    };
-
-    dispatch({ type: "ADD_EMPLOYEE", payload: employeeData });
-    // toast.success("Student added successfully!!");
     setName("");
     setEmail("");
     setDesignation("");
@@ -73,9 +57,13 @@ export default function CreateEmployee() {
       </button>
       <div className='modal fade' id='employeeModal'>
         <div className='modal-dialog'>
-          <div className='modal-content'>
+          <div className='modal-content' style={{ background: "#F1F1F1" }}>
             <div className='modal-header'>
-              <h5 className='modal-title' id='employeeModalLabel'>
+              <h5
+                className='modal-title'
+                id='employeeModalLabel'
+                style={{ color: "#5EC5CF" }}
+              >
                 Add New Employee
               </h5>
               <button
