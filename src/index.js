@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import employeeReducer from "./Redux/Reducers/employeeReducer";
-import cartReducer from "./Redux/Reducers/cartReducer";
+import cartReducer from "./Redux/Reducers/CartReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
@@ -21,6 +21,8 @@ const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
+
+console.log(store.getState());
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>

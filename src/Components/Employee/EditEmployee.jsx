@@ -13,7 +13,7 @@ export default function EditEmployee({ id }) {
   const [skill, setSkill] = useState("");
   const [date, setDate] = useState("");
 
-  const employees = useSelector((state) => state);
+  const employees = useSelector((state) => state.employeeReducer);
   const currentEmployee = employees.find(
     (employee) => employee.id === parseInt(id)
   );

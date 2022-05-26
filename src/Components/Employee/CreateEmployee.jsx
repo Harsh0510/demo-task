@@ -13,7 +13,7 @@ export default function CreateEmployee() {
   const [skill, setSkill] = useState("");
   const [date, setDate] = useState("");
 
-  const employees = useSelector((state) => state);
+  const employees = useSelector((state) => state.employeeReducer);
   const checkEmail = employees.find((employee) => employee.email === email);
 
   const dispatch = useDispatch();

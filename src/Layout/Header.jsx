@@ -15,8 +15,9 @@ export default function Header() {
         <Link to='/cart-task' className='text-decoration-none text-white'>
           <p>Cart-Task</p>
         </Link>
-        <p>About</p>
-        <p>Contact Us</p>
+        <Link to='/login' className='text-decoration-none text-white'>
+          <p>Login</p>
+        </Link>
       </div>
     </>
   );

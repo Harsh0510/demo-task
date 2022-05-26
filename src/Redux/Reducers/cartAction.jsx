@@ -1,4 +1,4 @@
-import { TOGGLE_CART, ADD_TO_CART, REMOVE_CART } from "./cartType";
+import { TOGGLE_CART, ADD_TO_CART, REMOVE_CART } from "./CartType";
 
 export function toggle_cart() {
   return {
@@ -13,9 +13,9 @@ export function addTOCart(data) {
   };
 }
 
-export function removeCart(data) {
+export function removeCart(id) {
   return {
     type: REMOVE_CART,
-    payload: data,
+    payload: id,
   };
 }

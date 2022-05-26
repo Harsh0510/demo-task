@@ -5,7 +5,7 @@ import "./CartTask.css";
 import { useSelector } from "react-redux";
 
 export default function CartTask() {
-  const showCart = useSelector((state) => state.ui.cartVisible);
+  const showCart = useSelector((state) => state.cartReducer.cartVisible);
 
   return (
     <div className='cartTask'>

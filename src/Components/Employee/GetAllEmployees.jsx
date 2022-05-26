@@ -14,7 +14,7 @@ export default function GetAllEmployees() {
   const usersPerPage = 5;
   const pagesVisited = pageNumber * usersPerPage;
 
-  let employee = useSelector((state) => state);
+  let employee = useSelector((state) => state.employeeReducer);
   let [employees, setEmployees] = useState(employee);
   let searchEmployees = employees.filter(
     (employee) =>
