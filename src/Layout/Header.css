@@ -11,3 +11,18 @@
 .header p:hover {
   color: yellow;
 }
+
+.header .dropdown ul {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header .dropdown button {
+  color: white;
+  position: relative;
+  bottom: 7px;
+  font-weight: bold;
+  cursor: pointer;
+}

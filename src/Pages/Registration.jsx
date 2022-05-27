@@ -1,12 +1,13 @@
 import { React, useEffect, useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../FirebaseAuth/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import validation from "../Utils/RegistrationValidation";
 
 export default function Registration() {
-  const [values, setValues] = useState({
+  const navigate = useNavigate();
+  const initialValues = {
     firstname: "",
     lastname: "",
     password: "",
@@ -14,36 +15,39 @@ export default function Registration() {
     email: "",
     mobilenumber: "",
     role: "",
-  });
+  };
+  const [values, setValues] = useState(initialValues);
   const [errorMsg, setErrorMsg] = useState({});
+  const [firebaseError, setFirebaseError] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (Object.keys(validation(values)).length !== 0) {
-      setErrorMsg(validation(values));
-    } else {
-      createUserWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password,
-        values.role,
-        values.firstname
-      )
-        .then((res) => {
+    setErrorMsg(validation(values));
+    setIsSubmit(true);
+  };
+
+  useEffect(() => {
+    console.log(errorMsg);
+    if (Object.keys(errorMsg).length === 0 && isSubmit) {
+      createUserWithEmailAndPassword(auth, values.email, values.password)
+        .then(async (res) => {
           console.log(res.user);
-          updateProfile(
+          await updateProfile(
             res.user,
             (res.user.firstname = values.firstname),
             (res.user.lastname = values.lastname),
             (res.user.mobilenumber = values.mobilenumber),
             (res.user.role = values.role)
           );
+          navigate("/login");
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
+          setFirebaseError(err.message);
         });
     }
-  };
+  }, [errorMsg]);
 
   return (
     <>
@@ -138,6 +142,7 @@ export default function Registration() {
             </select>
             <p className='error'>{errorMsg.role}</p>
           </div>
+          <p className='error'>{firebaseError}</p>
           <button type='submit'>Register</button>
           <p>
             Already Registered?{" "}

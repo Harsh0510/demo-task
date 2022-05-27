@@ -1,8 +1,7 @@
-const errorMsg = {};
 export default function validation(values) {
+  const errorMsg = {};
   if (!values.firstname) {
     errorMsg.firstname = "Please fill in the firstname field!";
-    return errorMsg;
   }
   if (!values.lastname) {
     errorMsg.lastname = "Please fill in the lastname field!";
@@ -25,4 +24,5 @@ export default function validation(values) {
   if (values.password !== values.confirmpassword) {
     errorMsg.role = "Please fill in the role field!";
   }
+  return errorMsg;
 }
