@@ -1,8 +1,6 @@
 import { React, useEffect, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../FirebaseAuth/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,17 +29,17 @@ export default function Login() {
   };
   useEffect(() => {
     console.log(errorMsg);
-    if (Object.keys(errorMsg).length === 0 && isSubmit) {
-      signInWithEmailAndPassword(auth, values.email, values.password)
-        .then(async (res) => {
-          console.log(res.user);
-          navigate("/");
-        })
-        .catch((err) => {
-          console.log(err.message);
-          setFirebaseError(err.message);
-        });
-    }
+    // if (Object.keys(errorMsg).length === 0 && isSubmit) {
+    //   signInWithEmailAndPassword(auth, values.email, values.password)
+    //     .then(async (res) => {
+    //       console.log(res.user);
+    //       navigate("/");
+    //     })
+    //     .catch((err) => {
+    //       console.log(err.message);
+    //       setFirebaseError(err.message);
+    //     });
+    // }
   }, [errorMsg]);
 
   return (

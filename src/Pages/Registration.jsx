@@ -1,8 +1,13 @@
 import { React, useEffect, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../FirebaseAuth/firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+} from "firebase/firestore/lite";
+import { db } from "../FirebaseAuth/firebase";
 import validation from "../Utils/RegistrationValidation";
 
 export default function Registration() {
@@ -30,21 +35,19 @@ export default function Registration() {
   useEffect(() => {
     console.log(errorMsg);
     if (Object.keys(errorMsg).length === 0 && isSubmit) {
-      createUserWithEmailAndPassword(auth, values.email, values.password)
-        .then(async (res) => {
-          console.log(res.user);
-          await updateProfile(
-            res.user,
-            (res.user.firstname = values.firstname),
-            (res.user.lastname = values.lastname),
-            (res.user.mobilenumber = values.mobilenumber),
-            (res.user.role = values.role)
-          );
+      addDoc(collection(db, "user"), {
+        email: values.email,
+        firstname: values.firstname,
+        lastname: values.lastname,
+        mobilenumber: values.mobilenumber,
+        password: values.password,
+        role: values.role,
+      })
+        .then((res) => {
           navigate("/login");
         })
-        .catch((err) => {
-          console.log(err.message);
-          setFirebaseError(err.message);
+        .catch((error) => {
+          console.log(error.message);
         });
     }
   }, [errorMsg]);

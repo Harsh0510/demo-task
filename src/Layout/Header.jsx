@@ -1,22 +1,12 @@
 import React from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
-import { auth } from "../FirebaseAuth/firebase";
-import { signOut } from "firebase/auth";
+
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const navigate = useNavigate();
-  const logOut = () => {
-    signOut(auth)
-      .then((res) => {
-        console.log(res);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+
   return (
     <>
       <div className='header'>
@@ -45,7 +35,7 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <button onClick={logOut}>
+              <button>
                 <p>Logout</p>
               </button>
             </li>
