@@ -1,7 +1,9 @@
 import React from "react";
 import "./Profile.css";
+import { useUserContext } from "../Utils/CurrentUser";
 
 export default function Profile() {
+  const { firstname, lastname, email, mobilenumber } = useUserContext();
   return (
     <>
       <div className='profile'>
@@ -12,13 +14,13 @@ export default function Profile() {
             alt='profileImage'
           />
           <p className='name'>
-            <span>Name</span> : Harsh Patel
+            <span>Name</span> : {firstname + " " + lastname}
           </p>
           <p>
-            <span>Email</span> : harsh112@gmail.com
+            <span>Email</span> : {email}
           </p>
           <p>
-            <span>PhoneNumber</span> : 9999999999
+            <span>PhoneNumber</span> : 99999999999
           </p>
         </div>
       </div>

@@ -1,14 +1,10 @@
 import { React, useEffect, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  addDoc,
-} from "firebase/firestore/lite";
-import { db } from "../FirebaseAuth/firebase";
+import { collection, addDoc } from "firebase/firestore/lite";
+import { auth, db } from "../FirebaseAuth/firebase";
 import validation from "../Utils/RegistrationValidation";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -20,6 +16,7 @@ export default function Registration() {
     email: "",
     mobilenumber: "",
     role: "",
+    image: null,
   };
   const [values, setValues] = useState(initialValues);
   const [errorMsg, setErrorMsg] = useState({});
@@ -33,21 +30,24 @@ export default function Registration() {
   };
 
   useEffect(() => {
-    console.log(errorMsg);
     if (Object.keys(errorMsg).length === 0 && isSubmit) {
-      addDoc(collection(db, "user"), {
-        email: values.email,
-        firstname: values.firstname,
-        lastname: values.lastname,
-        mobilenumber: values.mobilenumber,
-        password: values.password,
-        role: values.role,
-      })
-        .then((res) => {
-          navigate("/login");
+      createUserWithEmailAndPassword(auth, values.email, values.password)
+        .then(async (res) => {
+          const user = res.user;
+          await addDoc(collection(db, "user"), {
+            uid: user.uid,
+            email: values.email,
+            firstname: values.firstname,
+            lastname: values.lastname,
+            mobilenumber: values.mobilenumber,
+            password: values.password,
+            role: values.role,
+          });
+          navigate("/");
+          window.location.reload();
         })
         .catch((error) => {
-          console.log(error.message);
+          setFirebaseError(error.message);
         });
     }
   }, [errorMsg]);
@@ -145,6 +145,21 @@ export default function Registration() {
             </select>
             <p className='error'>{errorMsg.role}</p>
           </div>
+          {/* <div>
+            <label htmlfor='image' className='ms-5 text-white'>
+              Select ProfilePhoto
+            </label>
+            <input
+              type='file'
+              id='image'
+              name='image'
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, image: e.target.value }))
+              }
+              placeholder='ProfilePhoto*'
+            />
+            <p className='error'>{errorMsg.firstname}</p>
+          </div> */}
           <p className='error'>{firebaseError}</p>
           <button type='submit'>Register</button>
           <p>
