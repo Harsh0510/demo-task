@@ -1,18 +1,19 @@
 import React from "react";
 import "./Profile.css";
 import { useUserContext } from "../Utils/CurrentUser";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  const { firstname, lastname, email, mobilenumber } = useUserContext();
+  const { firstname, lastname, email, phoneNumber, photoUrl } =
+    useUserContext();
+  const navigate = useNavigate();
+  console.log(phoneNumber);
   return (
     <>
       <div className='profile'>
         <h2 className='profileHeader'>Profile</h2>
         <div className='profileContent'>
-          <img
-            src='https://i.pinimg.com/736x/fc/66/c3/fc66c31aeea59f4c1bcca8506b098dc1.jpg'
-            alt='profileImage'
-          />
+          <img src={photoUrl} alt='profileImage' />
           <p className='name'>
             <span>Name</span> : {firstname + " " + lastname}
           </p>
@@ -20,8 +21,15 @@ export default function Profile() {
             <span>Email</span> : {email}
           </p>
           <p>
-            <span>PhoneNumber</span> : 99999999999
+            <span>PhoneNumber</span> : {phoneNumber}
           </p>
+          <button
+            onClick={() => {
+              navigate("/edit-profile");
+            }}
+          >
+            Edit Profile
+          </button>
         </div>
       </div>
     </>

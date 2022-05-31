@@ -8,6 +8,7 @@ import Login from "../Pages/Login";
 import DemoTask from "../Pages/DemoTask";
 import CartTask from "../Pages/CartTask";
 import { Routes, Route } from "react-router";
+import EditProfile from "../Pages/EditProfile";
 
 export default function RoutesComponent() {
   const { firstname, role } = useUserContext();
@@ -19,6 +20,7 @@ export default function RoutesComponent() {
         {role === "admin" && <Route path='/demo-task' element={<DemoTask />} />}
         {firstname && <Route path='/profile' element={<Profile />} />}
         <Route path='/cart-task' element={<CartTask />} />
+        <Route path='/edit-profile' element={<EditProfile />} />
         <Route path='/login' element={<Login />} />
         <Route path='/registration' element={<Registration />} />
       </Routes>

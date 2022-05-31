@@ -5,6 +5,8 @@ import { collection, addDoc } from "firebase/firestore/lite";
 import { auth, db } from "../FirebaseAuth/firebase";
 import validation from "../Utils/RegistrationValidation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { storage } from "../FirebaseAuth/firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function Registration() {
   const navigate = useNavigate();
@@ -16,19 +18,36 @@ export default function Registration() {
     email: "",
     mobilenumber: "",
     role: "",
-    image: null,
   };
   const [values, setValues] = useState(initialValues);
   const [errorMsg, setErrorMsg] = useState({});
   const [firebaseError, setFirebaseError] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
+  const [photo, setPhoto] = useState(null);
+
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setPhoto(e.target.files[0]);
+    }
+  };
+  const upload = async (file, setLoading) => {
+    const fileRef = ref(storage, "images");
+    const snapshot = await uploadBytes(fileRef, file);
+    const purl = await getDownloadURL(fileRef);
+    return purl;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg(validation(values));
     setIsSubmit(true);
   };
-
+  useEffect(() => {
+    upload(photo).then((res) => {
+      setPhotoUrl(res);
+    });
+  }, [photoUrl]);
   useEffect(() => {
     if (Object.keys(errorMsg).length === 0 && isSubmit) {
       createUserWithEmailAndPassword(auth, values.email, values.password)
@@ -42,7 +61,10 @@ export default function Registration() {
             mobilenumber: values.mobilenumber,
             password: values.password,
             role: values.role,
+            url: photoUrl,
           });
+          console.log(photo);
+          console.log(photoUrl);
           navigate("/");
           window.location.reload();
         })
@@ -145,7 +167,7 @@ export default function Registration() {
             </select>
             <p className='error'>{errorMsg.role}</p>
           </div>
-          {/* <div>
+          <div>
             <label htmlfor='image' className='ms-5 text-white'>
               Select ProfilePhoto
             </label>
@@ -153,13 +175,10 @@ export default function Registration() {
               type='file'
               id='image'
               name='image'
-              onChange={(e) =>
-                setValues((prev) => ({ ...prev, image: e.target.value }))
-              }
+              onChange={handleChange}
               placeholder='ProfilePhoto*'
             />
-            <p className='error'>{errorMsg.firstname}</p>
-          </div> */}
+          </div>
           <p className='error'>{firebaseError}</p>
           <button type='submit'>Register</button>
           <p>

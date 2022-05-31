@@ -9,6 +9,8 @@ const useUserContext = () => useContext(UserContext);
 function UserProvider({ children }) {
   const [user, loading, error] = useAuthState(auth);
   const [firstname, setFirstName] = useState("");
+  const [uid, setUid] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -19,15 +21,19 @@ function UserProvider({ children }) {
       const q = query(collection(db, "user"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
       const data = doc.docs[0].data();
+      const dataId = doc.docs[0].id;
       setFirstName(data.firstname);
       setLastName(data.lastname);
       setEmail(data.email);
-      setPhoneNumber(data.phoneNumber);
+      setPhoneNumber(data.mobilenumber);
       setRole(data.role);
+      setPhotoUrl(data.url);
+      setUid(dataId);
     } catch (err) {
       console.error(err);
     }
   };
+
   const logout = () => {
     signOut(auth);
     setFirstName("");
@@ -35,6 +41,8 @@ function UserProvider({ children }) {
     setEmail("");
     setPhoneNumber("");
     setRole("");
+    setPhotoUrl("");
+    setUid("");
   };
 
   useEffect(() => {
@@ -48,8 +56,10 @@ function UserProvider({ children }) {
     lastname,
     email,
     phoneNumber,
+    photoUrl,
     role,
     logout,
+    uid,
   };
 
   return (
